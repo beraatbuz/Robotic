@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot_xacro">
+<xacro:include filename="$(find gazebo_files)/urdf/myrobot_descr.gazebo"/>
+
+	<xacro:property name="length_wheel" value="0.036" />
+	<xacro:property name="radius_wheel" value="0.04" />
+
+	<xacro:macro name="default_inertial" params="mass">
+               <inertial>
+                       <mass value="${mass}" />
+                       <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+                                iyy="1.0" iyz="0.0"
+                                izz="1.0" />
+               </inertial>
+	</xacro:macro>
+
+        <xacro:macro name="wheel_geometry">
+		<geometry>
+       			<cylinder length="${length_wheel}" radius="${radius_wheel}"/>
+     		</geometry>
+	</xacro:macro>
+
+	<link name="base_link">
+   		<visual>
+     			<geometry>
+       				<box size="0.205 0.155 0.02"/>
+     			</geometry>
+			<origin rpy="0 0 0" xyz="0 0 0.04"/>
+			<material name="white">
+				<color rgba="1 1 1 1"/>
+			</material>
+   		</visual>
+		<collision>
+			<geometry>
+       				<box size="0.205 0.155 0.02"/>
+			</geometry>
+		</collision>
+		<xacro:default_inertial mass="1"/>
+				
+ 	</link>
+
+ 	<link name="wheel_1">
+   		<visual>
+     			<xacro:wheel_geometry />
+			<origin rpy="0 1.5707 1.5707" xyz="0.0 0.0 0"/>
+   			<material name="black">
+				<color rgba="0 0 0 1"/>
+			</material>
+		</visual>
+		<collision>
+			<xacro:wheel_geometry />
+		</collision>
+		<xacro:default_inertial mass="0.01"/>
+ 	</link>
+
+ 	<link name="wheel_2">
+   		<visual>
+     			<xacro:wheel_geometry />
+			<origin rpy="0 1.5707 1.5707" xyz="-0.0 0.0 0"/>
+   			<material name="black"/>
+   		</visual>
+		<collision>
+			<xacro:wheel_geometry />
+		</collision>
+		<xacro:default_inertial mass="0.01"/>
+ 	</link>
+    
+ 	<link name="wheel_3">
+   		<visual>
+ 			<xacro:wheel_geometry />
+			<origin rpy="0 1.5707 1.5707" xyz="0.0 -0.0 0"/>
+   			<material name="black"/>
+   		</visual>
+		<collision>
+			<xacro:wheel_geometry />
+		</collision>
+		<xacro:default_inertial mass="0.01"/>
+ 	</link>
+
+ 	<link name="wheel_4">
+   		<visual>
+  			 <xacro:wheel_geometry />
+			<origin rpy="0 1.5707 1.5707" xyz="-0.0 -0.0 0"/>
+   			<material name="black"/>
+   		</visual>
+		<collision>
+			<xacro:wheel_geometry />
+		</collision>
+		<xacro:default_inertial mass="0.01"/>
+ 	</link>
+
+ 	<joint name="base_to_wheel1" type="continuous">
+		<parent link="base_link"/>
+		<child link="wheel_1"/>
+                <axis xyz="1 0 0"/>
+		<origin xyz="0.05 0.098 0.04"/>
+	</joint>
+	
+	<joint name="base_to_wheel2" type="continuous">
+		<parent link="base_link"/>
+		<child link="wheel_2"/>
+                <axis xyz="1 0 0"/>
+		<origin xyz="-0.05 0.098 0.04"/>
+	</joint>
+	
+	<joint name="base_to_wheel3" type="continuous">
+		<parent link="base_link"/>
+		<child link="wheel_3"/>
+                <axis xyz="1 0 0"/>
+		<origin xyz="0.05 -0.098 0.04"/>
+	</joint>
+	
+	<joint name="base_to_wheel4" type="continuous">
+		<parent link="base_link"/>
+		<child link="wheel_4"/>
+                <axis xyz="1 0 0"/>
+		<origin xyz="-0.05 -0.098 0.04"/>
+	</joint>
+
+	 <joint name="camera_joint" type="fixed">
+	    <axis xyz="-1 0 0" />
+	    <origin xyz="0.090 0 0.06" rpy="0 0 0"/>
+	    <parent link="base_link"/>
+	    <child link="camera_link"/>
+	  </joint>
+
+
+	  <link name="camera_link">
+	    <collision>
+	      <origin xyz="0 0 0" rpy="0 0 0"/>
+	      <geometry>
+		<box size="0.01 0.05 0.05"/>
+	      </geometry>
+	    </collision>
+
+	    <visual>
+	      <origin xyz="0 0 0" rpy="0 0 0"/>
+	      <geometry>
+		<box size="0.01 0.05 0.05"/>
+	      </geometry>
+	      <material name="red">
+		<color rgba="1 0 0 1"/>
+	      </material>
+	    </visual>
+
+	    <inertial>
+	      <mass value="1e-5" />
+	      <origin xyz="0 0 0" rpy="0 0 0"/>
+	      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+	    </inertial>
+	  </link>
+
+
+
+	<gazebo>
+	    <plugin name="object_controller" filename="libgazebo_ros_planar_move.so">
+	      <commandTopic>cmd_vel</commandTopic>
+	      <odometryTopic>odom</odometryTopic>
+	      <odometryFrame>odom</odometryFrame>
+	      <odometryRate>20.0</odometryRate>
+	      <robotBaseFrame>base_link</robotBaseFrame>
+	    </plugin>
+  	</gazebo>
+
+       
+</robot>

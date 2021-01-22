@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>launch_files</name>
+  <version>0.0.0</version>
+  <description>Launch Files</description>
+  <maintainer email="bos@bos.bos">bos</maintainer>
+  <license>Bos</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <export></export>
+</package>

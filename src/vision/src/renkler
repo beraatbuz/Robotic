@@ -1,0 +1,30 @@
+kırmızı
+'''
+        redUpper1 = (10, 255, 255)
+        redLower1 = (0, 70, 50)
+        redUpper2 = (180, 255, 255)
+        redLower2 = (170, 70, 50)
+    '''
+mavi
+    '''
+        redUpper1 = (140,255,255)
+        redLower1 = (100,150,0)
+        redUpper2 = (110,255,255)
+        redLower2 = (101,50,38)
+    '''
+yeşil
+redUpper1 = (102, 255, 255)
+        redLower1 = (25, 52, 72)
+        redUpper2 = (86, 255, 255)
+        redLower2 = (36, 0, 0)
+
+
+net koordinat
+
+0,500116, 0,597924, 0,000000
+
+
+Yeni netler
+
+sol						sağ
+-0,158722, 0,615755, 0,000000			1,190446, 0,605611, 0,000000

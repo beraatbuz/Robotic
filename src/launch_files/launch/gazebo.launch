@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<launch>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">	    
+	<arg name="world_name" value="$(find gazebo_files)/worlds/project.world"/>	    
+	<arg name="gui" value="true"/>	  
+	<arg name="paused" value="false"/>
+  </include>	
+
+
+  <arg name="x" default="0"/>
+  <arg name="y" default="0"/>
+  <arg name="z" default="0.05"/>
+  <arg name="roll" default="0"/>
+  <arg name="pitch" default="0"/>
+  <arg name="yaw" default="1.57"/>
+
+  <param name="robot_description" 
+	 command="$(find xacro)/xacro --inorder $(find gazebo_files)/urdf/myrobot_descr.xacro" />
+
+  
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          args="-urdf -model myrobot -param robot_description -x $(arg x) -y $(arg y) -z $(arg y) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/>
+   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />     
+
+
+</launch>

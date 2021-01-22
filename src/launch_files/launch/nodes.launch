@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<launch>
+  <include file="$(find map)/launch/map.launch"/>
+  <arg name="x1" default="0"/>
+  <arg name="y1" default="0"/>
+  
+ <node pkg="tf" type="static_transform_publisher" name="odom_to_map"
+    args="0 0  0  0 0 0  map odom 100" />
+
+<node pkg="tf" type="static_transform_publisher" name="laser_to_odom"
+    args="0 0  0.1  0 0 0  odom laser 100" />
+    
+ <node name="rviz" pkg="rviz" type="rviz" args="-d $(find launch_files)/rviz/viz_config.rviz" />
+ <node pkg ="control" type="BallPositionPublisher.py" name="BallPositionPublisher"/>
+
+
+
+  <arg name="odom_frame_id"   default="odom"/>
+  <arg name="base_frame_id"   default="base_link"/>
+  <arg name="global_frame_id" default="odom"/>
+  <arg name="odom_topic" default="odom" />
+  <arg name="laser_topic" default="scan" />
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find launch_files)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find launch_files)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />   
+    <rosparam file="$(find launch_files)/param/local_costmap_params.yaml" command="load" />   
+    <rosparam file="$(find launch_files)/param/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find launch_files)/param/dwa_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find launch_files)/param/move_base_params.yaml" command="load" />
+    <rosparam file="$(find launch_files)/param/global_planner_params.yaml" command="load" />
+
+    <param name="global_costmap/global_frame" value="$(arg global_frame_id)"/>
+    <param name="global_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+    <param name="local_costmap/global_frame" value="$(arg odom_frame_id)"/>
+    <param name="local_costmap/robot_base_frame" value="$(arg base_frame_id)"/>
+    <param name="DWAPlannerROS/global_frame_id" value="$(arg odom_frame_id)"/>
+
+    <remap from="odom" to="$(arg odom_topic)"/>
+    <remap from="scan" to="$(arg laser_topic)"/>
+  </node>
+
+
+</launch>
